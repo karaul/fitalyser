@@ -53,6 +53,7 @@ const mimeType = {
 
 
   fs.exists(pathname, function (exist) {
+    
     if(!exist) {
       // if the file is not found, return 404
       res.statusCode = 404;

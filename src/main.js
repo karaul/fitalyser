@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
   
   var csvfilename, data, headers;
 
+  /*
   var fitParser = new FitParser({
 	force: true,
 	speedUnit: 'km/h',
@@ -40,6 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	elapsedRecordField: true,
 	mode: 'list',
   });
+  */
 
   
   readtable.onchange = function (e) {
@@ -103,7 +105,39 @@ document.addEventListener('DOMContentLoaded', function () {
     document.body.appendChild(table);
   }
 
- 	function plotdata(e) {
+  var windowFitplotter;
+
+  function plotdata(e) {
+	// https://www.codemag.com/article/1511031/CRUD-in-HTML-JavaScript-and-jQuery
+	var filename = e.target.id;
+	console.log(filename);
+	//sessionStorage.setItem("filename", filename);
+	windowFitplotter = windowFitplotter || [];
+	if (windowFitplotter.window) {
+		//loadFitFile(blob);						
+		var windowFitplotterFiles = windowFitplotter.document.getElementById("files");
+		windowFitplotterFiles.options.add(new Option(filename, filename));
+		windowFitplotterFiles.value = filename;
+		windowFitplotterFiles.dispatchEvent(new Event('change'));
+	} else {		
+		filename = filename.replace("+","plus");
+		windowFitplotter = window.open('fitplotter.html?file=' + encodeURI(filename));						
+	}
+   /*
+	var xhr = new XMLHttpRequest();
+	//xhr.onreadystatechange = httpRequestfoo;
+	xhr.onload = httpRequestfoo;
+	xhr.open('GET', filename, true);
+	xhr.responseType = 'arraybuffer';
+	xhr.onerror = function (e) {
+		console.log(error(xhr.statusText));
+	};
+	xhr.send(null);
+	*/
+	// https://stackoverflow.com/questions/7255719/downloading-binary-data-using-xmlhttprequest-without-overridemimetype
+}
+
+ 	function plotdata_working(e) {
 			// https://www.codemag.com/article/1511031/CRUD-in-HTML-JavaScript-and-jQuery
 			var filename = e.target.id;
 			console.log(filename);
@@ -111,33 +145,29 @@ document.addEventListener('DOMContentLoaded', function () {
 			//xhr.onreadystatechange = httpRequestfoo;
 			xhr.onload = httpRequestfoo;
 			xhr.open('GET', filename, true);
-			xhr.responseType = 'arraybuffer'
+			xhr.responseType = 'arraybuffer';
 			xhr.onerror = function (e) {
 				console.log(error(xhr.statusText));
 			};
 			xhr.send(null);
 			// https://stackoverflow.com/questions/7255719/downloading-binary-data-using-xmlhttprequest-without-overridemimetype
-			//http.onload = function(e) {
-			//	if (this.status == 200) {
-			//		var blob = new Uint8Array(this.response);
-			//		console.log(blob);
-					/*
-					var uInt8Array = new Uint8Array(this.response); // Note:not xhr.responseText
-			 
-					for (var i = 0, len = uInt8Array.length; i < len; ++i) {
-						uInt8Array[i] = this.response[i];
-					}
-			 
-					var byte3 = uInt8Array[4]; // byte at offset 4
-					*/
-			//	}
-			//}
 		}
 
+		
 		function httpRequestfoo() {
 			if (this.readyState  === 4) {
 		   		if (this.status === 200) {
-				   	var blob = new Uint8Array(this.response);
+				   	blob = new Uint8Array(this.response);
+					//loadFitFile();					
+					windowFitplotter = windowFitplotter || [];
+					console.log(windowFitplotter);
+					sessionStorage.setItem("blob", blob);
+					if (windowFitplotter.window) {
+						loadFitFile(blob);						
+					} else {
+						windowFitplotter = window.open('fitplotter.html');						
+					}
+					/*   
 			   		fitParser.parse(blob, function (error, data) {
 						if (error) {
 							console.error(error);
@@ -147,31 +177,10 @@ document.addEventListener('DOMContentLoaded', function () {
 							console.log(data);
 				   		}
 			   		});
+					*/
 			   	}			
 		  	}		
 		}
-   
-		
-	/*function httpRequestfoo() {
-		 // Process the server response here.
-		//console.log(this.status);
-		//console.log(blob);
-		if (this.status == 200) {
-			var blob = new Uint8Array(this.response);
-			console.log(blob.length);
-			if ( blob.length > 0 ) {
-			fitParser.parse(blob, function (error, data) {
-				if (error) {
-				  console.error(error);
-				} 
-				else {
-				  //Here is the data as a JavaScript object. You can JSONify it or access the member as you need.
-				  console.log(data);
-				}
-			});
-			}			
-		}		
-	}*/
 
 
 })
