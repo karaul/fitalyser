@@ -31,6 +31,16 @@ document.addEventListener('DOMContentLoaded', function () {
   var readtable = document.getElementById('read_table');
   
   var csvfilename, data, headers;
+
+  var fitParser = new FitParser({
+	force: true,
+	speedUnit: 'km/h',
+	lengthUnit: 'm',
+	temperatureUnit: 'celsius',
+	elapsedRecordField: true,
+	mode: 'list',
+  });
+
   
   readtable.onchange = function (e) {
    var file = this.files[0];
@@ -88,13 +98,6 @@ document.addEventListener('DOMContentLoaded', function () {
 						var v = isNaN(d[p]) ? d[p]: parseFloat(d[p]).toFixed(2); // toPrecision(6).
 						cell.textContent = v;
 					}
-					
-					/* if (p in d) {
-						cell.textContent = d[p];
-					} else {
-						cell.innerHTML  = "<button id=" + d["filename"] + " style='width: 39px; height: 20px;'>Plot</button>";
-						cell.addEventListener("click", plotdata);
-					}*/
 				});
 			}
     document.body.appendChild(table);
@@ -104,20 +107,71 @@ document.addEventListener('DOMContentLoaded', function () {
 			// https://www.codemag.com/article/1511031/CRUD-in-HTML-JavaScript-and-jQuery
 			var filename = e.target.id;
 			console.log(filename);
-			var http = new XMLHttpRequest();
-			http.onreadystatechange = httpRequestfoo;
-			http.open('GET', filename, true);
-			http.send();
-			// https://developer.mozilla.org/en-US/docs/Web/Guide/AJAX/Getting_Started
-			//const { cellIndex: index } = target;
-			//var t = document.getElementById(target).parents("tr");
-			//window.alert(index);
+			var xhr = new XMLHttpRequest();
+			//xhr.onreadystatechange = httpRequestfoo;
+			xhr.onload = httpRequestfoo;
+			xhr.open('GET', filename, true);
+			xhr.responseType = 'arraybuffer'
+			xhr.onerror = function (e) {
+				console.log(error(xhr.statusText));
+			};
+			xhr.send(null);
+			// https://stackoverflow.com/questions/7255719/downloading-binary-data-using-xmlhttprequest-without-overridemimetype
+			//http.onload = function(e) {
+			//	if (this.status == 200) {
+			//		var blob = new Uint8Array(this.response);
+			//		console.log(blob);
+					/*
+					var uInt8Array = new Uint8Array(this.response); // Note:not xhr.responseText
+			 
+					for (var i = 0, len = uInt8Array.length; i < len; ++i) {
+						uInt8Array[i] = this.response[i];
+					}
+			 
+					var byte3 = uInt8Array[4]; // byte at offset 4
+					*/
+			//	}
+			//}
 		}
-	
-	function httpRequestfoo() {
-		console.log('httpRequestfoo: Process the server response here.')
+
+		function httpRequestfoo() {
+			if (this.readyState  === 4) {
+		   		if (this.status === 200) {
+				   	var blob = new Uint8Array(this.response);
+			   		fitParser.parse(blob, function (error, data) {
+						if (error) {
+							console.error(error);
+				   		} 
+				   		else {
+					 		//Here is the data as a JavaScript object. You can JSONify it or access the member as you need.
+							console.log(data);
+				   		}
+			   		});
+			   	}			
+		  	}		
+		}
+   
+		
+	/*function httpRequestfoo() {
 		 // Process the server response here.
-	}
+		//console.log(this.status);
+		//console.log(blob);
+		if (this.status == 200) {
+			var blob = new Uint8Array(this.response);
+			console.log(blob.length);
+			if ( blob.length > 0 ) {
+			fitParser.parse(blob, function (error, data) {
+				if (error) {
+				  console.error(error);
+				} 
+				else {
+				  //Here is the data as a JavaScript object. You can JSONify it or access the member as you need.
+				  console.log(data);
+				}
+			});
+			}			
+		}		
+	}*/
 
 
 })

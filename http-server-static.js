@@ -18,22 +18,23 @@ portscanner.findAPortNotInUse(3000,3999, '127.0.0.1', function(error, port) {
 // maps file extention to MIME types
 // full list can be found here: https://www.freeformatter.com/mime-types-list.html
 const mimeType = {
-  '.ico': 'image/x-icon',
-  '.html': 'text/html',
-  '.js': 'text/javascript',
-  '.cjs': 'application/javascript',
-  '.json': 'application/json',
-  '.css': 'text/css',
-  '.png': 'image/png',
-  '.jpg': 'image/jpeg',
-  '.wav': 'audio/wav',
-  '.mp3': 'audio/mpeg',
-  '.svg': 'image/svg+xml',
-  '.pdf': 'application/pdf',
-  '.zip': 'application/zip',
-  '.doc': 'application/msword',
-  '.eot': 'application/vnd.ms-fontobject',
-  '.ttf': 'application/x-font-ttf'
+  '.ico': 'image/x-icon'
+  ,'.html': 'text/html'
+  ,'.js': 'text/javascript'
+  ,'.cjs': 'application/javascript'
+  ,'.json': 'application/json'
+  ,'.css': 'text/css'
+  ,'.png': 'image/png'
+  ,'.jpg': 'image/jpeg'
+  ,'.wav': 'audio/wav'
+  ,'.mp3': 'audio/mpeg'
+  ,'.svg': 'image/svg+xml'
+  ,'.pdf': 'application/pdf'
+  ,'.zip': 'application/zip'
+  ,'.doc': 'application/msword'
+  ,'.eot': 'application/vnd.ms-fontobject'
+  ,'.ttf': 'application/x-font-ttf'
+  //'.fit': 'application/octet-stream'  // not needed. fit extension must be added as binary
 };
 
   
@@ -73,13 +74,15 @@ const mimeType = {
         // based on the URL path, extract the file extention. e.g. .js, .doc, ...
         const ext = path.parse(pathname).ext;
         // if the file is found, set Content-type and send data
-		console.log(ext);
-		if (ext == 'fit') {
-			console.log('here i should parse fit file')
-		} else {
+		//console.log(ext);
+		//if (ext === 'fit') {
+		//	console.log('here, now send fit file')
+		//	res.setHeader('Content-type', 'application/octet-stream' );
+		//	res.end(data);
+		//} else {
 			res.setHeader('Content-type', mimeType[ext] || 'text/plain' );
 			res.end(data);
-		}
+		//}
       }
       });
  
