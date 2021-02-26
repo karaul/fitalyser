@@ -2,7 +2,7 @@
 
 document.addEventListener('DOMContentLoaded', function () {
 
-  console.log('Hi there');
+  //console.log('Hi there');
   
   /* 
   function guessDelimiters (text, possibleDelimiters) {
@@ -105,23 +105,23 @@ document.addEventListener('DOMContentLoaded', function () {
     document.body.appendChild(table);
   }
 
-  var windowFitplotter;
+  var windowFitplotter = null;
 
   function plotdata(e) {
 	// https://www.codemag.com/article/1511031/CRUD-in-HTML-JavaScript-and-jQuery
 	var filename = e.target.id;
-	console.log(filename);
+	//console.log(filename);
 	//sessionStorage.setItem("filename", filename);
-	windowFitplotter = windowFitplotter || [];
-	if (windowFitplotter.window) {
-		//loadFitFile(blob);						
+	//windowFitplotter = windowFitplotter || [];
+	if (windowFitplotter == null || windowFitplotter.closed) {
+		filename = filename.replace("+","plus");
+		windowFitplotter = window.open('fitplotter.html?file=' + encodeURI(filename));						
+	} else {		
 		var windowFitplotterFiles = windowFitplotter.document.getElementById("files");
 		windowFitplotterFiles.options.add(new Option(filename, filename));
 		windowFitplotterFiles.value = filename;
 		windowFitplotterFiles.dispatchEvent(new Event('change'));
-	} else {		
-		filename = filename.replace("+","plus");
-		windowFitplotter = window.open('fitplotter.html?file=' + encodeURI(filename));						
+		windowFitplotterFiles.focus();
 	}
    /*
 	var xhr = new XMLHttpRequest();

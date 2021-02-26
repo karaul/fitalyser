@@ -6,7 +6,7 @@
 
 document.addEventListener('DOMContentLoaded', function () {
 
-		console.log('fitplotter says Aloha');
+		//console.log('fitplotter says Aloha');
 
 		const swap = (arr, x, y) => [arr[x], arr[y]] = [arr[y], arr[x]];
 		const calcMiddle = (x, y) => ~~((x + y) / 2);
@@ -585,7 +585,7 @@ document.addEventListener('DOMContentLoaded', function () {
 				if (error) {
 					console.log(error);
 				} else {
-					console.log(data);
+					//console.log(data);
 					//console.log(data.laps);
 					if ("activity" in data) {
 						local_timestamp = ("local_timestamp" in data.activity ?
@@ -830,8 +830,8 @@ document.addEventListener('DOMContentLoaded', function () {
 		document.getElementById('files').onchange = function (e) {
 			filename = document.getElementById("files").value;	
 			//filename = "activities/2020-09-01T15_50_22+00_00_5472387357.fit";
-			console.log('files changed');  
-			console.log(filename);  
+			//console.log('files changed');  
+			//console.log(filename);  
 			var xhr = new XMLHttpRequest();			
 			xhr.onload = httpRequestfoo;
 			xhr.open('GET', decodeURI(filename), true);
@@ -846,10 +846,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		const queryString = window.location.search; //href;
 		const urlParams = new URLSearchParams(queryString);
-		console.log(urlParams.get('file'));    
+		//console.log(urlParams.get('file'));    
 		var filename = urlParams.get('file'); 
 		filename = filename.replace("plus","+");
-		console.log(filename);    
+		//console.log(filename);    
 		document.getElementById("files").options.add(new Option(filename, filename));  
 		document.getElementById("files").value = filename;
 		document.getElementById('files').dispatchEvent(new Event('change'));
