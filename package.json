@@ -2,12 +2,12 @@
   "author": {
     "name": "Evgeny Votyaκοv"
   },
-  "description": "Parse and plot Garmin .fit file",
+  "description": "Wrapper to work with fitplotter, analysis of the Garmin FIT files",
   "license": "MIT",
   "main": "http-server-static.js",
-  "name": "fitplotter",
+  "name": "fitalyser",
   "scripts": {},
-  "version": "0.0.2",
+  "version": "0.1.0",
   "dependencies": {
     "open": "^7.4.0",
     "portscanner": "^2.2.0"

@@ -585,7 +585,7 @@ document.addEventListener('DOMContentLoaded', function () {
 				if (error) {
 					console.log(error);
 				} else {
-					//console.log(data);
+					console.log(data);
 					//console.log(data.laps);
 					if ("activity" in data) {
 						local_timestamp = ("local_timestamp" in data.activity ?
