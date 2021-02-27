@@ -1,6 +1,6 @@
 # fitalyser
 
-This is a wrapper to work with the [fitplotter](https://karaul.github.io/fitplotter). 
+This is a wrapper to work with the [fitplotter](https://github.com/karaul/fitplotter/). 
 
 ## Motivation 
 
