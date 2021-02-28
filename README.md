@@ -31,6 +31,9 @@ node .
 
 To format table use `tableHeaders.js`. (To be continued)
 
+Read [CHANGELOG.md](https://github.com/karaul/fitalyser/blob/master/CHANGELOG.md) for last change - there are   explanations how to use the program too.
+
+
 ## How it works
 
 `fitalyser` needs a static http-server to read local FIT files. Without the server, each time when you select a FIT file in the table, there will be a dialog asking for file's location and user's confirmation to open the file, alhough the path to the file is already in the table, and `fitalyser` aim is to avoid unnecessary clicks. Υou may use your own server or to use `http-server-static.js`, working with `node.exe`, which has to be installed before, download it from [nodejs](https://nodejs.org/en/). All the `*.bat` files and `*.js` utlitiies must be preceeded by the `node.exe`. If something does not work at all, check path  in the corresponding `*.bat` file, and read carefully messages in the command prompt.
