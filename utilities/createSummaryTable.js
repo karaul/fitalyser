@@ -1,11 +1,13 @@
 // usage in the Windows command prompt:
-//  path-to-node.exe/node.exe utils/createSummaryTable.js
+//  path-to-node.exe/node.exe utilities/createSummaryTable.js
 //
 // ---- user input---------------------------------------------------------------//
 //const activitesFolder = './../activities/';
 const activitesFolder = './temp';
 const tableName = "mytable.csv";
 const delimiter = ",";
+// to see possible headers use checkFields.js 
+// filename is not in the headers, it is added automatically
 const headers = ["start_time", "sport", "sub_sport", "total_distance", "total_timer_time",
   "avg_speed", "pace", "avg_heart_rate", "HRE", "max_heart_rate", "max_speed", "total_ascent", "total_descent", ,
   "avg_cadence", "max_cadence", "total_training_effect", "swim_stroke",

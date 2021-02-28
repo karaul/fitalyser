@@ -1,5 +1,5 @@
 // usage in the Windows command prompt:
-//  path-to-node.exe/node.exe utils/checkFields.js
+//  path-to-node.exe/node.exe utilities/checkFields.js
 //
 // ---- uswer input -----------------------//
 const file = "./../temp/2020-09-03T16_02_36+00_00_5482235452.fit";
