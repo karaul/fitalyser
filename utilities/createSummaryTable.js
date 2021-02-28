@@ -1,13 +1,6 @@
-// usage in the Windows command prompt:
-//  path-to-node.exe/node.exe utilities/createSummaryTable.js
-//
-// ---- user input---------------------------------------------------------------//
-//const activitesFolder = './../activities/';
-const activitesFolder = './temp';
-const tableName = "mytable.csv";
-const delimiter = ",";
-// to see possible headers use checkFields.js 
-// filename is not in the headers, it is added automatically
+// Usage: ./path-to-node/node.exe ./path-of-createSummaryTable/createSummaryTable.js -h
+
+// ---- user input: it's possible to change FIT fields below
 const headers = ["start_time", "sport", "sub_sport", "total_distance", "total_timer_time",
   "avg_speed", "pace", "avg_heart_rate", "HRE", "max_heart_rate", "max_speed", "total_ascent", "total_descent", ,
   "avg_cadence", "max_cadence", "total_training_effect", "swim_stroke",
@@ -15,28 +8,61 @@ const headers = ["start_time", "sport", "sub_sport", "total_distance", "total_ti
 ];
 // ---- end of user input--------------------------------------------------------//
 
-
 const fs = require('fs');
+
+// quick and dirty include
+// https://stackoverflow.com/questions/5797852/in-node-js-how-do-i-include-functions-from-my-other-files
+try {
+  eval(fs.readFileSync('./utilities/getargs.js')+'');
+} catch (err) {
+  eval(fs.readFileSync('getargs.js')+'');
+}
+
+const args = getArgs();
+for (const [key, value] of Object.entries(args)) {
+  switch (key) {
+    case "h":
+      console.log("\nUsage:\n");
+      console.log("./path-to-node/node.exe createSummaryTable.js --name=tableName.csv --directory=activitesFolder\n");
+      console.log("help: ./path-to-node/node.exe createSummaryTable.js -h\n");
+      return;     
+    case "directory":
+      var activitesFolder = args.directory;
+      console.log("\nactivitesFolder: " + activitesFolder +"\n");
+      break;
+    case "name":
+      var tableName = args.name;
+      console.log("\ntableName: " + tableName + "\n");
+      break;
+    default:
+      console.log("wrong option: " + key + "\n");
+      return;
+  }
+}
+
+if (activitesFolder == null) {
+  console.log("no activitesFolder");
+  return;
+}
+if (tableName == null) {
+  console.log("no tableName");
+  return;
+}
+
+const delimiter = ",";
+
+try {
+  var FitParser = require('./src/fit-parser.js');
+} catch (err) {
+  var FitParser = require('./../src/fit-parser.js');
+}
 
 function text(arr, field1) {
   var text = field1;
   for (var k = 0; k < arr.length; k++) {
     text += delimiter + arr[k];
   }
-  return text += "\n";
-}
-
-fs.writeFile(activitesFolder + "/" + tableName, text(headers, "filename"), 'utf8', function (err) {
-  if (err) {
-    console.log('Error at writing headers to table');
-  }
-});
-
-
-try {
-  var FitParser = require('./src/fit-parser.js');
-} catch (err) {
-  var FitParser = require('./../src/fit-parser.js');
+  return text;
 }
 
 var fitParser = new FitParser({
@@ -51,22 +77,30 @@ var fitParser = new FitParser({
 
 fs.readdir(activitesFolder, (err, files) => {
   if (err) {
-    console.log(err);
-    console.log("\nCheck path to FIT file\n");
+    console.log("\nDoes not exist: \"" + activitesFolder + "\n\nCheck path to FIT files\n");
+    return;
   } else {
+
+    fs.writeFile(activitesFolder + "/" + tableName, text(headers, "filename"), 'utf8', function (err) {
+      if (err) {
+        console.log('Error at writing headers to table');
+        return;
+      }
+    });
+    
     files.forEach(file => {
       if (file.slice(-4) === ".fit") {
-        console.log(file);
 
         fs.readFile(activitesFolder + "/" + file, function (err, content) {
           if (err) {
             console.log("\nCheck path to FIT file\n");
-            console.log(err);
+            //console.log(err);
+            return;            
           } else {
             fitParser.parse(content, function (error, data) {
               if (error) {
-                console.log("\nCheck path to FIT file\n");
-                console.log(error);
+                console.log("Wrong FIT file\n");
+                //console.log(error);
               } else {
                 var record = {};
                 record["filename"] = file;
@@ -94,7 +128,9 @@ fs.readdir(activitesFolder, (err, files) => {
                   rec.push(record[headers[k]]);
                 }
 
-                fs.appendFile(activitesFolder + "/" + tableName, text(rec, activitesFolder + "/" + file), 'utf8', function (err) {
+                console.log(file);
+
+                fs.appendFile(activitesFolder + "/" + tableName, text(rec, "\n" + activitesFolder + "/" + file), 'utf8', function (err) {
                   if (err) {
                     console.log('Error at writing to table the record:');
                   }
