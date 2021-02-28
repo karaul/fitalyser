@@ -1,11 +1,12 @@
 // usage in the Windows command prompt:
 //  path-to-node.exe/node.exe utilities/checkFields.js
 //
-// ---- uswer input -----------------------//
+// ---- user input -----------------------//
 const file = "./../temp/2020-09-03T16_02_36+00_00_5482235452.fit";
 // ---- end of user input-----------------//
 
 var fs = require('fs');
+
 try {
   var FitParser = require('./src/fit-parser.js');
 }
@@ -21,7 +22,7 @@ fs.readFile(file, function (err, content) {
     lengthUnit: 'km',
     temperatureUnit: 'celcius',
     elapsedRecordField: true,
-    mode: 'list',                  //using 'cascade' or 'both' doesn't seem to work
+    mode: 'list',                
   });
   
   fitParser.parse(content, function (error, data) {
