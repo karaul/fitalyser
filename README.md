@@ -31,7 +31,7 @@ node .
 
 To format table use `tableHeaders.js`. (To be continued)
 
-Read [CHANGELOG.md](https://github.com/karaul/fitalyser/blob/master/CHANGELOG.md) for last change - there are   explanations how to use the program too.
+Read [CHANGELOG.md](https://github.com/karaul/fitalyser/blob/master/CHANGELOG.md) for last changes - there are   explanations how to use the program too.
 
 
 ## How it works
