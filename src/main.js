@@ -26,6 +26,24 @@ document.addEventListener('DOMContentLoaded', function () {
 		}
 	}
 
+	function sortByColumn({ target }) {
+		const order = (target.dataset.order = -(target.dataset.order || -1));
+		const { cellIndex: index } = target;
+		const collator = new Intl.Collator(["en", "ru"], {
+			numeric: true
+		});
+		const comparator = (index, order) => (a, b) => order * collator.compare(
+			a.children[index].textContent,
+			b.children[index].textContent
+		);
+		for(const tBody of target.closest("table").tBodies)
+			tBody.append(...[...tBody.rows].sort(comparator(index, order)));
+
+		for(const cell of target.parentNode.cells)
+			cell.classList.toggle("sorted", cell === target);
+	}
+
+
 
 	var csvReader = new FileReader();
 	var readtable = document.getElementById('read_table');
@@ -142,6 +160,9 @@ document.addEventListener('DOMContentLoaded', function () {
 				cell.tabIndex = 0;
 			}
 		});
+		tHead.addEventListener("click", sortByColumn);
+		tHead.addEventListener("keyup", sortByColumn);
+
 
 		const tBody = table.createTBody();
 		for (const d of data) {
