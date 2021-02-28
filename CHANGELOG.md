@@ -6,7 +6,7 @@ Changes to this project are documented in this file
 #### 2020-02-27
 - README.md
 - CHANGELOG.md is started after reading nice [source](https://keepachangelog.com/en/1.0.0/)
-- few utilities `utilitites/*.js` to check FIT flie and generate table are  added, they need better diocumentation
+- few utilities `utilitites/*.js` to check FIT flie and generate table are  added, they need better documentation
 - src folder is cleaned
 - index.html: better table formatting
 - utilities need better diocumentation
