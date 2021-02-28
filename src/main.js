@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	readtable.onchange = function (e) {
 		var file = this.files[0];
-		//console.log(file);
+		console.log(file);
 		csvfilename = file.name;
 		csvReader.readAsText(file);
 	}
@@ -70,14 +70,16 @@ document.addEventListener('DOMContentLoaded', function () {
 			var r = {};
 			var linedata = lines[i].split(delimiter);
 			//console.log(linedata);
-			for (var k = 0; k < linedata.length; k++) {
-				//console.log(headers[k]);			
-				//console.log(linedata[k]);
-				if (headers[k] in tableHeaders || headers[k] === "filename") {
-					r[headers[k]] = linedata[k];
+			if (linedata[0].slice(-4) === ".fit") { 
+				for (var k = 0; k < linedata.length; k++) {
+					//console.log(headers[k]);			
+					//console.log(linedata[k]);
+					if (headers[k] in tableHeaders || headers[k] === "filename") {
+						r[headers[k]] = linedata[k];
+					}
 				}
-			}
-			data.push(r);
+				data.push(r);
+			}			
 		}
 
 		// sort out headers accoreing to tableHeaders
