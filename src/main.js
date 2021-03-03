@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -70,6 +70,23 @@ document.addEventListener('DOMContentLoaded', function () {
   });
   */
 
+ 	var windowFitplotter = null;
+
+	function plotdata(e) {
+		// https://www.codemag.com/article/1511031/CRUD-in-HTML-JavaScript-and-jQuery
+	 	var filename = e.target.id;
+	 	if (windowFitplotter == null || windowFitplotter.closed) {
+			filename = filename.replace("+", "plus");
+			windowFitplotter = window.open('fitplotter/index.html?file=' + encodeURI(filename));
+		} else {
+			var windowFitplotterFiles = windowFitplotter.document.getElementById("files");
+			windowFitplotterFiles.options.add(new Option(filename, filename));
+			windowFitplotterFiles.value = filename;
+			windowFitplotterFiles.dispatchEvent(new Event('change'));
+			windowFitplotterFiles.focus();
+	 	}
+ 	}
+
 
 	readtable.onchange = function (e) {
 		var file = this.files[0];
@@ -78,10 +95,13 @@ document.addEventListener('DOMContentLoaded', function () {
 		csvReader.readAsText(file);
 	}
 
-
 	csvReader.onload = function (e) {
 		var text = e.target.result;
 		//console.log(text);
+		parseTable(text);
+	}
+
+	function parseTable(text) {
 		var lines = text.split(/[\r\n]+/g); // tolerate both Windows and Unix linebreaks
 		for (var i = linestart; i < lines.length; i++) {
 			lines[i] = lines[i].trim().replace(/\s{2,}/g, ' ');
@@ -131,14 +151,17 @@ document.addEventListener('DOMContentLoaded', function () {
 		for (k = headers.length - 1; k >= kput; k--) {
 			headers.pop();
 		}
-
 		// add header for the Plot button
 		headers.push("Plot");
 		if (tableHeadersFlag) tableHeaders.Plot = {
 			name: "Plot",
 			style: "width: 30px"
 		};
+		makeTable();
+	}
 
+	//--------------- create and fill the table ------------------
+	function makeTable() {
 		var row, cell;
 		const table = document.createElement("table");
 		const tHead = table.createTHead();
@@ -183,25 +206,9 @@ document.addEventListener('DOMContentLoaded', function () {
 		document.body.appendChild(table);
 		//resizableGrid(table);
 	}
+	//----- create and fill the table ------------------
 
-	var windowFitplotter = null;
-
-	function plotdata(e) {
-		// https://www.codemag.com/article/1511031/CRUD-in-HTML-JavaScript-and-jQuery
-		var filename = e.target.id;
-		if (windowFitplotter == null || windowFitplotter.closed) {
-			filename = filename.replace("+", "plus");
-			windowFitplotter = window.open('fitplotter.html?file=' + encodeURI(filename));
-		} else {
-			var windowFitplotterFiles = windowFitplotter.document.getElementById("files");
-			windowFitplotterFiles.options.add(new Option(filename, filename));
-			windowFitplotterFiles.value = filename;
-			windowFitplotterFiles.dispatchEvent(new Event('change'));
-			windowFitplotterFiles.focus();
-		}
-
-	}
-
+	//------- make nice view of the table -------------
 	function resizableGrid(table) {
 		var row = table.getElementsByTagName('tr')[0],
 			cols = row ? row.children : undefined;
@@ -289,6 +296,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			return (window.getComputedStyle(elm, null).getPropertyValue(css))
 		}
 	};
+	//----------- make nice view of the table ------------------
 
 
 })
