@@ -70,21 +70,34 @@ document.addEventListener('DOMContentLoaded', function () {
   });
   */
 
- 	var windowFitplotter = null;
+ 	let windowFitplotter = null;
 
 	function plotdata(e) {
 		// https://www.codemag.com/article/1511031/CRUD-in-HTML-JavaScript-and-jQuery
-	 	var filename = e.target.id;
+		let filename = document.getElementById("activities_path").value + "/";
+		for ( var k=0; k <  document.getElementById("levelup").value; k++) {
+			filename = "LevelUp" + filename; // "/../"" decripted via LevelUp"
+		}
+		filename += e.target.id; // e.target.id contains cell content
 	 	if (windowFitplotter == null || windowFitplotter.closed) {
 			filename = filename.replace("+", "plus");
-			windowFitplotter = window.open('fitplotter/index.html?file=' + encodeURI(filename));
+			windowFitplotter = window.open('/fitplotter/index.html?file=' + encodeURI(filename));
 		} else {
 			var windowFitplotterFiles = windowFitplotter.document.getElementById("files");
 			windowFitplotterFiles.options.add(new Option(filename, filename));
 			windowFitplotterFiles.value = filename;
 			windowFitplotterFiles.dispatchEvent(new Event('change'));
-			windowFitplotterFiles.focus();
+			windowFitplotter.focus();
 	 	}
+		/*if (windowFitplotter == null || windowFitplotter.closed) 
+			windowFitplotter = window.open("./../fitplotter/index.html");
+		let windowFitplotterFiles = windowFitplotter.document.getElementById("files");
+		let filename = document.getElementById("activities_path").value;
+		filename += e.target.id; // e.target.id contains cell content
+		windowFitplotterFiles.options.add(new Option("filename", filename));
+		windowFitplotterFiles.value = filename;
+		windowFitplotterFiles.dispatchEvent(new Event('change'));
+		windowFitplotter.focus();*/
  	}
 
 

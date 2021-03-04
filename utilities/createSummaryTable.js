@@ -52,9 +52,9 @@ if (tableName == null) {
 const delimiter = ",";
 
 try {
-  var FitParser = require('./src/fit-parser.js');
+  var FitParser = require('./fitplotter/src/fit-parser.js');
 } catch (err) {
-  var FitParser = require('./../src/fit-parser.js');
+  var FitParser = require('./../fitplotter/src/fit-parser.js');
 }
 
 function text(arr, field1) {
@@ -120,9 +120,15 @@ fs.readdir(activitesFolder, (err, files) => {
                   record["start_time"] = new Date(data.sessions[0]["start_time"]).toISOString();
                 /*if ("total_distance" in data.sessions[0])
                   record["total_distance"] = data.sessions[0]["total_distance"]/1000;*/
-                if ("total_timer_time" in data.sessions[0])
-                  record["total_timer_time"] = data.sessions[0]["total_timer_time"] / 60;
-
+                if ("total_timer_time" in data.sessions[0]) {
+                  // check below /60 - in minutes
+                  const ttt = data.sessions[0]["total_timer_time"];
+                  const h = Math.floor(ttt/3600);
+                  const m = Math.floor(ttt/60) - h*60;
+                  const sec = ttt < 300 ? (ttt % 60).toFixed(2): (ttt % 60).toFixed();
+                  record["total_timer_time"] =  h.toString().padStart(2,'0') + 
+                    ":" + m.toString().padStart(2,'0') + ":" + sec.toString().padStart(2,'0');
+                }
                 var rec = [];
                 for (var k = 0; k < headers.length; k++) {
                   rec.push(record[headers[k]]);
@@ -130,7 +136,7 @@ fs.readdir(activitesFolder, (err, files) => {
 
                 console.log(file);
 
-                fs.appendFile(activitesFolder + "/" + tableName, text(rec, "\n" + activitesFolder + "/" + file), 'utf8', function (err) {
+                fs.appendFile(activitesFolder + "/" + tableName, text(rec, "\n" + file), 'utf8', function (err) {
                   if (err) {
                     console.log('Error at writing to table the record:');
                   }

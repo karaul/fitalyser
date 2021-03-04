@@ -51,6 +51,16 @@ const mimeType = {
   const sanitizePath = path.normalize(parsedUrl.pathname).replace(/^(\.\.[\/\\])+/, '');
   let pathname = path.join(__dirname, sanitizePath);
 
+  console.log("before: " + pathname);
+  pathname = pathname.replace(/LevelUp/g, '/../');
+  console.log("after:" + pathname);
+
+  // the simplest, nο sanitizePath. does not work ?
+  //let pathname = path.join(__dirname, parsedUrl.pathname);
+
+  //dirty way
+  //if (path.parse(pathname).ext === ".fit") 
+  //  pathname = path.join(__dirname, '..', '..', sanitizePath);
 
   fs.exists(pathname, function (exist) {
     

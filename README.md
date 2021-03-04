@@ -18,7 +18,7 @@ To analyse my own 10 years running experience recorded in several thousands bina
 
 ### Installation for programmers who found it in github
 
-`github clone https://github.com/karaul/fitalyser`
+`github clone https://github.com/karaul/fitalyser.git`
 
 ## Usage
 
