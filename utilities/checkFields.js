@@ -5,14 +5,17 @@
 const file = "./../temp/2020-09-03T16_02_36+00_00_5482235452.fit";
 // ---- end of user input-----------------//
 
+require.path = ["fitplotter/src/", "./../fitplotter/src/", "./../../fitplotter/src/"];
+var FitParser = require('./../../fitplotter/src/fit-parser.js');
+
 var fs = require('fs');
 
-try {
-  var FitParser = require('./src/fit-parser.js');
+/*try {
+  var FitParser = require('./fitplotter/src/fit-parser.js');
 }
 catch(err) {
-  var FitParser = require('./../src/fit-parser.js');
-}
+  var FitParser = require('./../fitplotter/src/fit-parser.js');
+}*/
 
 fs.readFile(file, function (err, content) {
 
@@ -30,7 +33,7 @@ fs.readFile(file, function (err, content) {
       console.log(error);
       console.log("\nCheck path to FIT file\n");
     } else {
-      console.log(data.sessions);
+      console.log(data);
     }
   });
 });

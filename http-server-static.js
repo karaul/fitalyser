@@ -51,9 +51,9 @@ const mimeType = {
   const sanitizePath = path.normalize(parsedUrl.pathname).replace(/^(\.\.[\/\\])+/, '');
   let pathname = path.join(__dirname, sanitizePath);
 
-  console.log("before: " + pathname);
+  //console.log("before: " + pathname);
   pathname = pathname.replace(/LevelUp/g, '/../');
-  console.log("after:" + pathname);
+  //console.log("after:" + pathname);
 
   // the simplest, nο sanitizePath. does not work ?
   //let pathname = path.join(__dirname, parsedUrl.pathname);
@@ -84,16 +84,8 @@ const mimeType = {
       } else {
         // based on the URL path, extract the file extention. e.g. .js, .doc, ...
         const ext = path.parse(pathname).ext;
-        // if the file is found, set Content-type and send data
-		//console.log(ext);
-		//if (ext === 'fit') {
-		//	console.log('here, now send fit file')
-		//	res.setHeader('Content-type', 'application/octet-stream' );
-		//	res.end(data);
-		//} else {
-			res.setHeader('Content-type', mimeType[ext] || 'text/plain' );
-			res.end(data);
-		//}
+  			res.setHeader('Content-type', mimeType[ext] || 'text/plain' );
+	  		res.end(data);
       }
       });
  

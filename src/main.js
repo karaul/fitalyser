@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	//console.log('Hi there');
 
-
+	//------------------  utilities -----------------------------//
 	function guessDelimiters(text, possibleDelimiters) {
 		return possibleDelimiters.filter(weedOut);
 
@@ -25,6 +25,69 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 		}
 	}
+	//------------------  utilities -----------------------------//
+
+	//var csvReader = new FileReader();
+	//var readtable = document.getElementById('read_table');
+	var pathname;
+	var data;
+	var headers;
+
+	var tableHeadersFlag;
+	try {
+		tableHeaders = tableHeaders;
+		tableHeadersFlag = true;
+	} catch (err) {
+		tableHeadersFlag = false;
+	}
+
+	function errorNoFile(error,file, errorId) {
+		console.log(error);
+		switch (errorId) {
+			case 1:
+				alert("ERROR\nProbably file:\n" + file + "\ndoes not exist");
+				break;
+			case 2:
+				alert("ERROR\nProbably file:\n" + file + "\ncorrupted");
+				break;
+			default:
+				alert("ERROR\nfile:\n" + file);
+				break;
+		}
+	}
+			
+	document.getElementById('openFile').onclick = function (e) {
+		//if(document.getElementsByTagName("table"))  // need to check
+		//	document.getElementsByTagName("table").remove();
+		const file = document.getElementById('file').value;
+		//console.log(file);
+		const  filenamexhr = file.indexOf("../") < 0 ? file:
+			file.replace(/\.\./g, 'LevelUp').
+			replace(/LevelUp\//g, 'LevelUp').replace(/\/LevelUp/g, 'LevelUp');
+		//console.log(filenamexhr);
+		let xhr = new XMLHttpRequest();			
+		xhr.onload = function() {
+			if (this.readyState  === 4) {
+			   if (this.status === 200) {
+					const text = this.response;
+					//console.log(text);
+					// store pathname for future access
+					pathname = filenamexhr.slice(0,filenamexhr.indexOf("/"));
+					//console.log(pathname);
+					parseTable(text);
+				}			
+				if (this.status === 404) {
+					errorNoFile("status 404",file, 1);	
+				}
+			}
+		}
+		xhr.open('GET', decodeURI(filenamexhr), true);
+		//xhr.responseType = 'arraybuffer';
+		xhr.onerror = function (e) {
+			console.log(error(xhr.statusText));	
+		}
+		xhr.send(null);				
+	}
 
 	function sortByColumn({ target }) {
 		const order = (target.dataset.order = -(target.dataset.order || -1));
@@ -43,45 +106,21 @@ document.addEventListener('DOMContentLoaded', function () {
 			cell.classList.toggle("sorted", cell === target);
 	}
 
-
-
-	var csvReader = new FileReader();
-	var readtable = document.getElementById('read_table');
-
-	var csvfilename, data, headers;
-
-	var tableHeadersFlag;
-	try {
-		tableHeaders = tableHeaders;
-		tableHeadersFlag = true;
-	} catch (err) {
-		tableHeadersFlag = false;
-	}
-
-
-	/*
-  var fitParser = new FitParser({
-	force: true,
-	speedUnit: 'km/h',
-	lengthUnit: 'm',
-	temperatureUnit: 'celsius',
-	elapsedRecordField: true,
-	mode: 'list',
-  });
-  */
-
  	let windowFitplotter = null;
 
 	function plotdata(e) {
+		// e.target.id contains cell content = name of the FIT file
 		// https://www.codemag.com/article/1511031/CRUD-in-HTML-JavaScript-and-jQuery
-		let filename = document.getElementById("activities_path").value + "/";
+		let filename = pathname.indexOf("LevelUp") < 0 ?
+			"./fitalyser/" + pathname: pathname.replace("LevelUp","");
+		/*let filename = document.getElementById("activities_path").value + "/";
 		for ( var k=0; k <  document.getElementById("levelup").value; k++) {
 			filename = "LevelUp" + filename; // "/../"" decripted via LevelUp"
-		}
-		filename += e.target.id; // e.target.id contains cell content
+		}*/
+		filename += "/" + e.target.id; 
 	 	if (windowFitplotter == null || windowFitplotter.closed) {
 			filename = filename.replace("+", "plus");
-			windowFitplotter = window.open('/fitplotter/index.html?file=' + encodeURI(filename));
+			windowFitplotter = window.open('LevelUp/fitplotter/index.html?file=' + encodeURI(filename));
 		} else {
 			var windowFitplotterFiles = windowFitplotter.document.getElementById("files");
 			windowFitplotterFiles.options.add(new Option(filename, filename));
@@ -89,19 +128,10 @@ document.addEventListener('DOMContentLoaded', function () {
 			windowFitplotterFiles.dispatchEvent(new Event('change'));
 			windowFitplotter.focus();
 	 	}
-		/*if (windowFitplotter == null || windowFitplotter.closed) 
-			windowFitplotter = window.open("./../fitplotter/index.html");
-		let windowFitplotterFiles = windowFitplotter.document.getElementById("files");
-		let filename = document.getElementById("activities_path").value;
-		filename += e.target.id; // e.target.id contains cell content
-		windowFitplotterFiles.options.add(new Option("filename", filename));
-		windowFitplotterFiles.value = filename;
-		windowFitplotterFiles.dispatchEvent(new Event('change'));
-		windowFitplotter.focus();*/
  	}
 
 
-	readtable.onchange = function (e) {
+	/*readtable.onchange = function (e) {
 		var file = this.files[0];
 		//console.log(file);
 		csvfilename = file.name;
@@ -112,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		var text = e.target.result;
 		//console.log(text);
 		parseTable(text);
-	}
+	}*/
 
 	function parseTable(text) {
 		var lines = text.split(/[\r\n]+/g); // tolerate both Windows and Unix linebreaks
