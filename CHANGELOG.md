@@ -7,6 +7,16 @@
 - docs: how-to for `tableHeaders.js`;
 - docs: how to connect `fitplotter`;
 
+### 2021-03-05
+
+-  Now `src/fitplotter` is not needed anymore and so removed;  `fitplotter` must be installed side-by-side with the `fytalyser`:
+ ```
+/fitplotter
+/fytalyser
+```
+so the changes in the  `fitplotter`'s code make effect immediately in the `fitplotter`. (Βefore `src/fitplotter` and standalone `fitplotter` had  separated code)
+
+
 ### 2021-03-03
 
 - refactoring to use the same code as in the standalone [fitploter](https://github.com/karaul/fitplotter);
