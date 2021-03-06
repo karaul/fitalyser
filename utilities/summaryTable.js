@@ -1,4 +1,7 @@
-// Usage: ./path-to-node/node.exe ./path-of-createSummaryTable/createSummaryTable.js -h
+// Usage with default options:
+// ./path-to-node/node.exe ./path-to-summaryTable/summaryTable.js 
+// Help:
+//./path-to-node/node.exe ./path-to-summaryTable/summaryTable.js -h
 
 // ---- user input: it's possible to change FIT fields below
 const headers = ["start_time", "sport", "sub_sport", "total_distance", "total_timer_time",
@@ -6,13 +9,12 @@ const headers = ["start_time", "sport", "sub_sport", "total_distance", "total_ti
   "avg_cadence", "max_cadence", "total_training_effect", "swim_stroke",
   "avg_temperature", "max_temperature", "total_anaerobic_effect"
 ];
-const delimiter = ",";
 // ---- end of user input--------------------------------------------------------//
 
 const fs = require('fs');
 
-// quick and dirty include
-// https://stackoverflow.com/questions/5797852/in-node-js-how-do-i-include-functions-from-my-other-files
+
+const delimiter = ",";
 
 var
   FitParser,
@@ -28,6 +30,8 @@ var
 
 //console.log("CWD: " + process.cwd() )
 if (process.cwd().indexOf("utilities") < 0) {
+  // quick and dirty include
+  // https://stackoverflow.com/questions/5797852/in-node-js-how-do-i-include-functions-from-my-other-files
   eval(fs.readFileSync('./utilities/getargs.js') + '');
 } else {
   eval(fs.readFileSync('getargs.js') + '');
@@ -126,7 +130,7 @@ fs.readdir(activitiesFolder, (err, files) => {
             return;
           } else {
 
-            if ( !(tableExist) || (tableExist && !filesInTable.includes(file)) ) {
+            if (!(tableExist) || (tableExist && !filesInTable.includes(file))) {
               console.log("Adding: " + file);
               parser.parse(content, function (error, data) {
                 if (error) {

@@ -14,7 +14,16 @@ To analyse my own 10 years running experience recorded in several thousands bina
 
 - Click on the green button, download everything as zip file and unzip.
 - Install [nodejs](https://nodejs.org/en/)
-- to be continued
+- Ιnstall `fitplotter` [fitplotter](https://github.com/karaul/fitplotter/) side-by-syde
+- click `fitalyser.bat` and then click Open
+- check that it works with the activies given in `myactivities` folder
+- close `fitalyser`
+- remove all files from  `myactivities`
+- copy to `myactivities` folder your `*.fit` files
+- click `summaryTable.bat` and check that the `*.csv` table is created in  `myactivities`
+- click `fitalyser.bat`  then click Open
+- if I did no mistakes and you follewed the above items, the table with your data will be opened
+
 
 ### Installation for programmers who found it in github
 
@@ -22,12 +31,14 @@ To analyse my own 10 years running experience recorded in several thousands bina
 
 ## Usage
 
-Υou need a table with the locations of the FIT files to be analysed. This table must be prepared in advance. In the `utilities` folder there are two  utilities: `checkFields.js` checks fields in the FIT tested file, and `createSummaryTable.js` creates the table. If the table is builded correctly, then clicking on the  "Plot" button sends the FIT file to the `fitplotter` form. To use these utilities do the following:
+Υou need a table with the locations of the FIT files to be analysed. This table must be prepared in advance. In the `utilities` folder there are two  utilities: `checkFields.js` checks fields in the FIT tested file, and `summaryTable.js` creates the table. If the table is builded correctly, then clicking on the  "Plot" button sends the FIT file to the `fitplotter` form. To use these utilities do the following:
 
 - open command prompt;
 - move to the program location;
 - make sure you know where is `node.exe`;
 - open in a plain text editor the needed utlities and read first commented lines there. You should correct paths in this utlities to the directory with your FIT files. The final table will be in the same directory;
+
+`summaryTable.bat` creates `table.csv` file if it does not exist, otherwise new `*.fit` files will be added in the existing `table.csv`
 
 To format table use `tableHeaders.js`. (To be continued)
 

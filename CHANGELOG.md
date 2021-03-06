@@ -4,8 +4,9 @@
 
 ## To do
 
+- docs: installation
 - docs: how-to for `tableHeaders.js`;
-- docs: how to connect `fitplotter`;
+- ~~docs: how to connect `fitplotter`~~;
 
 ### 2021-03-05
 
