@@ -14,15 +14,15 @@ To analyse my own 10 years running experience recorded in several thousands bina
 
 - Click on the green button, download everything as zip file and unzip.
 - Install [nodejs](https://nodejs.org/en/)
-- Ιnstall `fitplotter` [fitplotter](https://github.com/karaul/fitplotter/) side-by-syde
+- Ιnstall [fitplotter](https://github.com/karaul/fitplotter/) side-by-syde
 - click `fitalyser.bat` and then click Open
-- check that it works with the activies given in `myactivities` folder
+- check if it works with the activies given in `myactivities` folder
 - close `fitalyser`
 - remove all files from  `myactivities`
 - copy to `myactivities` folder your `*.fit` files
 - click `summaryTable.bat` and check that the `*.csv` table is created in  `myactivities`
 - click `fitalyser.bat`  then click Open
-- if I did no mistakes and you follewed the above items, the table with your data will be opened
+- if I did no mistakes and you followed the above items, the table with your data will be opened
 
 
 ### Installation for programmers who found it in github
@@ -38,9 +38,9 @@ To analyse my own 10 years running experience recorded in several thousands bina
 - make sure you know where is `node.exe`;
 - open in a plain text editor the needed utlities and read first commented lines there. You should correct paths in this utlities to the directory with your FIT files. The final table will be in the same directory;
 
-`summaryTable.bat` creates `table.csv` file if it does not exist, otherwise new `*.fit` files will be added in the existing `table.csv`
+`summaryTable.bat` is to work with  `table.csv`. If it does not exist `table.csv` will be created, otherwise new `*.fit` files, absent in the current `table.csv`,  will be added in the existing `table.csv`. 
 
-To format table use `tableHeaders.js`. (To be continued)
+To format table you can use `tableHeaders.js`. (To be continued - need how-to)
 
 Read [CHANGELOG.md](https://github.com/karaul/fitalyser/blob/master/CHANGELOG.md) for last changes - there are   explanations how to use the program too.
 
