@@ -21,7 +21,7 @@ To analyse my own 10 years running experience recorded in several thousands bina
 - remove all files from  `myactivities`
 - copy to `myactivities` folder your `*.fit` files
 - click `summaryTable.bat` and check that the `*.csv` table is created in  `myactivities`
-- click `fitalyser.bat`  then click Open
+- click `fitalyser.bat` 
 - if I did no mistakes and you followed the above items, the table with your data will be opened
 
 

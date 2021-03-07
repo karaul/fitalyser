@@ -45,7 +45,7 @@
 <body>
 
 	<label for="file">Αctivities file:</label>
-	<input id="file" type="text" value="myactivities/table.csv" style="padding: 0px; size: 120px" /> 
+	<input id="file" type="text" value="./myactivities/table.csv"/> 
 	<input id="openFile" type="button" value='Open file'/> 
     &nbsp Level up = ./../ &nbsp &nbsp root=/fitalyser
 	<!-- <label for="read_table">Load activities table:</label> -->
@@ -54,6 +54,12 @@
 	<!-- <input id="activities_path" type="text" value='./' style="padding: 0px; size: 120px" />  -->
 	<!-- <input type="number" id="levelup"  min="0" value="0" style="width: 40px;"> -->
 	<!-- <label for="levelup">levels up, root=fitalyser </label>  -->		
+	&nbsp
+	<select name="fileauto" id="fileauto" style = "text-align:right;"> 
+		<option value="./myactivities/table.csv" selected>myactivities</option>
+		<option value="./../../python/activities/summary2016-20xx.csv">2016-20xx</option>
+		<option value="./../../python/activities/summary2011-2016.csv">2011-2016</option>
+	</select>
 
 </body>
 

@@ -32,6 +32,8 @@ document.addEventListener('DOMContentLoaded', function () {
 	var pathname;
 	var data;
 	var headers;
+	var table;
+	//var numberDiv = 0;
 
 	var tableHeadersFlag;
 	try {
@@ -55,13 +57,17 @@ document.addEventListener('DOMContentLoaded', function () {
 				break;
 		}
 	}
+
+	document.getElementById('fileauto').onchange = function (e) {
+		document.getElementById('file').value = this.value;
+		document.getElementById('file').style.width = ((this.value.length + 1) * 8) + 'px';
+		table.remove();
+		document.getElementById('openFile').dispatchEvent(new Event('click'));
+	}
 			
 	document.getElementById('openFile').onclick = function (e) {
-		//if(document.getElementsByTagName("table"))  // need to check
-		//	document.getElementsByTagName("table").remove();
 		const file = document.getElementById('file').value;
-		//console.log(file);
-		const  filenamexhr = file.indexOf("../") < 0 ? file:
+		const filenamexhr = file.indexOf("../") < 0 ? file:
 			file.replace(/\.\./g, 'LevelUp').
 			replace(/LevelUp\//g, 'LevelUp').replace(/\/LevelUp/g, 'LevelUp');
 		//console.log(filenamexhr);
@@ -72,7 +78,10 @@ document.addEventListener('DOMContentLoaded', function () {
 					const text = this.response;
 					//console.log(text);
 					// store pathname for future access
-					pathname = filenamexhr.slice(0,filenamexhr.indexOf("/"));
+					let i = filenamexhr.indexOf("/");
+					let idx = i;
+					while (i != -1) { idx = i; i = filenamexhr.indexOf("/", idx + 1) }
+					pathname = filenamexhr.slice(0,idx) || "LevelUpfitalyser";
 					//console.log(pathname);
 					parseTable(text);
 				}			
@@ -113,11 +122,8 @@ document.addEventListener('DOMContentLoaded', function () {
 		// https://www.codemag.com/article/1511031/CRUD-in-HTML-JavaScript-and-jQuery
 		let filename = pathname.indexOf("LevelUp") < 0 ?
 			"./fitalyser/" + pathname: pathname.replace("LevelUp","");
-		/*let filename = document.getElementById("activities_path").value + "/";
-		for ( var k=0; k <  document.getElementById("levelup").value; k++) {
-			filename = "LevelUp" + filename; // "/../"" decripted via LevelUp"
-		}*/
 		filename += "/" + e.target.id; 
+		//console.log(filename);
 	 	if (windowFitplotter == null || windowFitplotter.closed) {
 			filename = filename.replace("+", "plus");
 			windowFitplotter = window.open('LevelUp/fitplotter/index.html?file=' + encodeURI(filename));
@@ -205,24 +211,39 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	//--------------- create and fill the table ------------------
 	function makeTable() {
+
+		//var tableDiv = document.createElement('div');
+		//tableDiv.id = 'divtable' + toString(numberDiv);
+		//numberDiv +=1;
+		//tableDiv.height = "600px";
+		//iDiv.className = 'block';
+		//document.getElementsByTagName('body')[0].appendChild(tableDiv);
+
 		var row, cell;
-		const table = document.createElement("table");
+		table = document.createElement("table");
+		table.style.display = "block";
+		table.style.overflow = "auto";
+		table.style.height = "700px";
+		table.style.width = "auto";
+
 		const tHead = table.createTHead();
 		row = tHead.insertRow();
-		var w = 100 / (headers.length);
-		row.style = "color: #fff; background-color: #555";
-		headers.forEach(p => {
+		row.style = "color: #fff; background-color: #555;";
+		//row.style.position = "sticky";
+		//row.style.top = "0";
+		let cellstyle = "text-align:right; word-wrap:break-word; position:sticky; top:0;";
+		headers.forEach(p => {			
 			if (tableHeadersFlag) {
 				if (p in tableHeaders) {
 					cell = row.insertCell();
 					cell.textContent = tableHeaders[p].name;
-					cell.style = "text-align:right; word-wrap:break-word; " + tableHeaders[p].style;
+					cell.style = cellstyle + " " + tableHeaders[p].style;
 					cell.tabIndex = 0;
 				}
 			} else {
 				cell = row.insertCell();
 				cell.textContent = p;
-				cell.style = "text-align:right; word-wrap:break-word; "
+				cell.style = cellstyle;
 				cell.tabIndex = 0;
 			}
 		});
@@ -246,7 +267,9 @@ document.addEventListener('DOMContentLoaded', function () {
 				cell.style = "text-align:right; word-wrap:break-word; "
 			});
 		}
+		//style="display: block; height: 100px; overflow: auto;"
 		document.body.appendChild(table);
+		//tableDiv.appendChild(table);
 		//resizableGrid(table);
 	}
 	//----- create and fill the table ------------------
@@ -341,5 +364,5 @@ document.addEventListener('DOMContentLoaded', function () {
 	};
 	//----------- make nice view of the table ------------------
 
-
+	document.getElementById('openFile').dispatchEvent(new Event('click'));
 })
