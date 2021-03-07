@@ -8,6 +8,10 @@
 - docs: how-to for `tableHeaders.js`;
 - ~~docs: how to connect `fitplotter`~~;
 
+### 2021-03-07
+
+- on the start it opens automaticaly `myactovities/table`
+
 ### 2021-03-05
 
 -  Now `src/fitplotter` is not needed anymore and so removed;  `fitplotter` must be installed side-by-side with the `fytalyser`:
