@@ -16,3 +16,4 @@ tableHeaders = {
     avg_cadence: {name: "Сadence", style: "width: 10%"},
     //filename: {name: "File", style: "width: 200px;"}
 };
+

@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		tableHeadersFlag = false;
 	}
 
-	function errorNoFile(error,file, errorId) {
+	function errorNoFile(error, file, errorId) {
 		console.log(error);
 		switch (errorId) {
 			case 1:
@@ -60,47 +60,57 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	document.getElementById('fileauto').onchange = function (e) {
 		document.getElementById('file').value = this.value;
-		document.getElementById('file').style.width = ((this.value.length + 1) * 8) + 'px';
-		table.remove();
+		document.getElementById('file').style.width = ((this.value.length + 1) * 6) + "px";
 		document.getElementById('openFile').dispatchEvent(new Event('click'));
 	}
-			
+
+	function cleanDoubleDots(file) {
+		return file.indexOf("../") < 0 ? file :
+		file.replace(/\.\./g, 'LevelUp').
+		replace(/LevelUp\//g, 'LevelUp').replace(/\/LevelUp/g, 'LevelUp');
+	}
+
 	document.getElementById('openFile').onclick = function (e) {
 		const file = document.getElementById('file').value;
-		const filenamexhr = file.indexOf("../") < 0 ? file:
-			file.replace(/\.\./g, 'LevelUp').
-			replace(/LevelUp\//g, 'LevelUp').replace(/\/LevelUp/g, 'LevelUp');
+		const filenamexhr = cleanDoubleDots(file);
 		//console.log(filenamexhr);
-		let xhr = new XMLHttpRequest();			
-		xhr.onload = function() {
-			if (this.readyState  === 4) {
-			   if (this.status === 200) {
+		let xhr = new XMLHttpRequest();
+		xhr.onload = function () {
+			if (this.readyState === 4) {
+				if (this.status === 200) {
 					const text = this.response;
 					//console.log(text);
 					// store pathname for future access
 					let i = filenamexhr.indexOf("/");
 					let idx = i;
-					while (i != -1) { idx = i; i = filenamexhr.indexOf("/", idx + 1) }
-					pathname = filenamexhr.slice(0,idx) || "LevelUpfitalyser";
+					while (i != -1) {
+						idx = i;
+						i = filenamexhr.indexOf("/", idx + 1)
+					}
+					pathname = filenamexhr.slice(0, idx) || "LevelUpfitalyser";
 					//console.log(pathname);
 					parseTable(text);
-				}			
+				}
 				if (this.status === 404) {
-					errorNoFile("status 404",file, 1);	
+					errorNoFile("status 404", file, 1);
 				}
 			}
 		}
 		xhr.open('GET', decodeURI(filenamexhr), true);
 		//xhr.responseType = 'arraybuffer';
 		xhr.onerror = function (e) {
-			console.log(error(xhr.statusText));	
+			console.log(error(xhr.statusText));
 		}
-		xhr.send(null);				
+		xhr.send(null);
 	}
 
-	function sortByColumn({ target }) {
+	function sortByColumn({
+		target
+	}) {
 		const order = (target.dataset.order = -(target.dataset.order || -1));
-		const { cellIndex: index } = target;
+		const {
+			cellIndex: index
+		} = target;
 		const collator = new Intl.Collator(["en", "ru"], {
 			numeric: true
 		});
@@ -108,23 +118,23 @@ document.addEventListener('DOMContentLoaded', function () {
 			a.children[index].textContent,
 			b.children[index].textContent
 		);
-		for(const tBody of target.closest("table").tBodies)
+		for (const tBody of target.closest("table").tBodies)
 			tBody.append(...[...tBody.rows].sort(comparator(index, order)));
 
-		for(const cell of target.parentNode.cells)
+		for (const cell of target.parentNode.cells)
 			cell.classList.toggle("sorted", cell === target);
 	}
 
- 	let windowFitplotter = null;
+	let windowFitplotter = null;
 
 	function plotdata(e) {
 		// e.target.id contains cell content = name of the FIT file
 		// https://www.codemag.com/article/1511031/CRUD-in-HTML-JavaScript-and-jQuery
 		let filename = pathname.indexOf("LevelUp") < 0 ?
-			"./fitalyser/" + pathname: pathname.replace("LevelUp","");
-		filename += "/" + e.target.id; 
+			"./fitalyser/" + pathname : pathname.replace("LevelUp", "");
+		filename += "/" + e.target.id;
 		//console.log(filename);
-	 	if (windowFitplotter == null || windowFitplotter.closed) {
+		if (windowFitplotter == null || windowFitplotter.closed) {
 			filename = filename.replace("+", "plus");
 			windowFitplotter = window.open('LevelUp/fitplotter/index.html?file=' + encodeURI(filename));
 		} else {
@@ -133,8 +143,8 @@ document.addEventListener('DOMContentLoaded', function () {
 			windowFitplotterFiles.value = filename;
 			windowFitplotterFiles.dispatchEvent(new Event('change'));
 			windowFitplotter.focus();
-	 	}
- 	}
+		}
+	}
 
 
 	/*readtable.onchange = function (e) {
@@ -212,6 +222,13 @@ document.addEventListener('DOMContentLoaded', function () {
 	//--------------- create and fill the table ------------------
 	function makeTable() {
 
+		/*
+		let dynaTable = document.getElementById('mytable');
+		console.log(dynaTable)
+		if (dynaTable) {
+			dynaTable.parentNode.removeChild(dynaTable); 
+		} 
+		*/
 		//var tableDiv = document.createElement('div');
 		//tableDiv.id = 'divtable' + toString(numberDiv);
 		//numberDiv +=1;
@@ -221,6 +238,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 		var row, cell;
 		table = document.createElement("table");
+		table.Id = "mytable";
 		table.style.display = "block";
 		table.style.overflow = "auto";
 		table.style.height = "700px";
@@ -232,7 +250,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		//row.style.position = "sticky";
 		//row.style.top = "0";
 		let cellstyle = "text-align:right; word-wrap:break-word; position:sticky; top:0;";
-		headers.forEach(p => {			
+		headers.forEach(p => {
 			if (tableHeadersFlag) {
 				if (p in tableHeaders) {
 					cell = row.insertCell();
@@ -364,5 +382,192 @@ document.addEventListener('DOMContentLoaded', function () {
 	};
 	//----------- make nice view of the table ------------------
 
-	document.getElementById('openFile').dispatchEvent(new Event('click'));
+	//-----------  Garmin Connect xhr --------------
+	function httpRequestOnLoad() {
+		if (this.readyState === 4 && this.status === 200) {
+			var activitiesList = this.response;
+			//console.log(activitiesList);
+			//document.getElementById("activitiesList").value = activitiesList[0].activityId;
+			tableHeadersFlag = true;
+			tableHeaders = {
+				startTimeLocal: {
+					name: "Day and time",
+					style: "width: 200px;"
+				},
+				locationName: {
+					name: "Place",
+					style: "width: 200px;"
+				},
+				sport: {
+					name: "Sport",
+					style: "width: 10%;"
+				},
+				distance: {
+					name: "Distance, km",
+					style: "width: 10%;"
+				},
+				duration: {
+					name: "Time, hours",
+					style: "width: 10%"
+				},
+				averageSpeed: {
+					name: "Speed",
+					style: "width: 10%;"
+				},
+				pace: {
+					name: "Pace",
+					style: "width: 5%;"
+				},
+				averageHR: {
+					name: "HR",
+					style: "width: 7%;"
+				},
+				HRE: {
+					name: "HRE",
+					style: "width: 7%;"
+				},
+				averageRunningCadenceInStepsPerMinute: {
+					name: "Сadence",
+					style: "width: 10%;"
+				},
+				Plot: {
+					name: "Plot",
+					style: "width: 30px"
+				},
+				filename: {
+					name: "File", 
+					style: "width: 200px;"
+				},
+				activityId: { 
+					name: "Id",
+					style: "width: 10%"
+				},
+			};
+			headers = Object.keys(tableHeaders);
+			data = [];
+			for (let i = 0; i < activitiesList.length; i++) {
+				let r = {};
+				// (headers.length - 1) in order to exclude Plot
+				for (var k = 0; k < headers.length - 1; k++) {
+					var d = activitiesList[i];
+					switch (headers[k]) {
+						case "sport":
+							r[headers[k]] = d["activityType"]["typeKey"];
+							break;
+						case "startTimeLocal":
+							r[headers[k]] = new Date(d["startTimeLocal"]).toISOString();
+							break;
+						case "distance":
+							r[headers[k]] = d[headers[k]] / 1000;
+							break;
+						case "duration":
+							const ttt = d[headers[k]];
+							const h = Math.floor(ttt / 3600);
+							const m = Math.floor(ttt / 60) - h * 60;
+							const sec = ttt < 300 ? (ttt % 60).toFixed(2) : (ttt % 60).toFixed();
+							r[headers[k]] = h.toString().padStart(2, '0') +
+								":" + m.toString().padStart(2, '0') + ":" + sec.toString().padStart(2, '0');
+							break;
+						case "pace":
+							r[headers[k]] = 60.0 / (d["averageSpeed"] * 3600 / 1000);
+							break;
+						case "averageSpeed":
+							r[headers[k]] = d["averageSpeed"] * 3600 / 1000;
+							break;
+						case "HRE":
+							r[headers[k]] = d["averageHR"] * 60.0 / (d["averageSpeed"] * 3600 / 1000);
+							break;
+						case "filename":
+							const id = d.activityId;
+							const time = new Date(d.startTimeLocal).toISOString();
+							r[headers[k]] = time.replace(/:/g, "_").replace(".000Z","+00_00") + "_" + id + ".fit";
+							break;
+						default:
+							r[headers[k]] = d[headers[k]];
+							break;
+					}
+				}
+				data.push(r);
+			}
+		}
+		//console.log(data);
+		// remove activityId in order do not show it in the table, but have accessible in the data
+	    headers.splice( headers.indexOf("activityId"), 1 );
+		// now generate table with data formed from activitiesList
+  		makeTable();
+		if (this.status === 404) {
+			throw Error("Errow with httpRequestOnLoad");
+		}
+	}
+
+
+	function formatParams(params) {
+		return "?" + Object
+			.keys(params)
+			.map(function (key) {
+				return key + "=" + encodeURIComponent(params[key])
+			})
+			.join("&")
+	};
+
+	function makeXMLHttpRequest(params) {
+		let xhr = new XMLHttpRequest();
+		xhr.onload = httpRequestOnLoad;
+		//xhr.onreadystatechange = httpRequestOnLoad;
+		xhr.open('GET', "/" + formatParams(params), true);
+		xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+		xhr.responseType = 'json'; // for bynary 'arraybuffer'
+		xhr.onerror = function (e) {
+			console.log(error(xhr.statusText));
+		}
+		xhr.send(null);
+	}
+
+	document.getElementById('activitiesList').onclick = function (e) {
+		let params = {
+			"foo": "activitiesList", //", // "userinfo",
+			"start_index": document.getElementById('start_index').value,
+			"max_limit": document.getElementById('max_limit').value,
+		};
+		makeXMLHttpRequest(params);
+	}
+
+	document.getElementById('cleanTable').onclick = function (e) {
+		//let url = window.location.search;
+		//const k = url.indexOf("/index.html");
+		//url = k ? url.slice(0,k): url;
+		//window.location.search = url + 'clean=yes';
+		window.location.search = 'action=clean';
+		console.log(window.location.search)
+		setTimeout(function () {
+			document.location.reload();
+			//window.location.reload();
+		}, 300);
+	}
+
+	//-----------  Garmin Connect xhr --------------
+
+	const queryString = window.location.search;
+	const urlParams = new URLSearchParams(queryString);
+	const action = urlParams.get('action');
+	if (!action) {
+		document.getElementById('openFile').dispatchEvent(new Event('click'));
+	} else {
+		if ( action === 'GC' ) {
+			let start_index = urlParams.get('start_index') || 0;
+			let max_limit = urlParams.get('max_limit') || 20;
+			let downloadDir = urlParams.get('downloadDir') || 'undefined';
+			document.getElementById('start_index').value = start_index;
+			document.getElementById('max_limit').value = max_limit;
+			document.getElementById('downloadDir').value = downloadDir;
+			pathname = cleanDoubleDots(downloadDir);
+			document.getElementById('activitiesList').dispatchEvent(new Event('click'));
+		}
+		if ( action === 'file' ) {
+			const file = urlParams.get('file');
+			document.getElementById('file').value = file;
+			document.getElementById('openFile').dispatchEvent(new Event('click'));
+		}
+	}
+
 })

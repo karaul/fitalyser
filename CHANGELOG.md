@@ -4,13 +4,28 @@
 
 ## To do
 
+- make `GChandler` public
 - docs: installation
-- docs: how-to for `tableHeaders.js`;
-- ~~docs: how to connect `fitplotter`~~;
+- docs: how-to for working with `tableHeaders.js`;
+- docs: how-to for working with `GChandler`;
+- ~~docs: how to for working with `fitplotter`~~;
+
+### 2021-03-20
+
+- connected with `GChandler` = Garmin Connect + handler
+
+The working installation is:
+ ```
+/GChandler
+/fytalyser
+/fitplotter
+```
+The `GChandler` is supposed to be public soon.
+
 
 ### 2021-03-07
 
-- on the start it opens automaticaly `myactovities/table`
+- on the start it opens automaticaly `myactivities/table`
 
 ### 2021-03-05
 

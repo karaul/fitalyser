@@ -44,22 +44,38 @@
 
 <body>
 
-	<label for="file">Αctivities file:</label>
+	<label for="fileauto">Predefined:</label>
+	<select name="fileauto" id="fileauto" style = "text-align:right;"> 
+		<option value="./myactivities/table.csv" selected>myactivities</option>
+		<option value="./../../python/activities/summary2016-20xx.csv">2016-20xx</option>
+		<option value="./../../python/activities/summary2011-2016.csv">2011-2016</option>
+	</select>
+	&nbsp
+	<!-- <label for="file">Read file:</label> -->
 	<input id="file" type="text" value="./myactivities/table.csv"/> 
-	<input id="openFile" type="button" value='Open file'/> 
-    &nbsp Level up = ./../ &nbsp &nbsp root=/fitalyser
+	<input id="openFile" type="button" value='Read file'/> 
+    <!-- &nbsp Level up = ./../ &nbsp &nbsp root=/fitalyser -->
 	<!-- <label for="read_table">Load activities table:</label> -->
 	<!-- <input id="read_table" type="file" value='' accept=".csv"  style="padding: 0px; size: 200px" />  -->
 	<!-- <label for="read_table">Path to activities folder:</label> -->
 	<!-- <input id="activities_path" type="text" value='./' style="padding: 0px; size: 120px" />  -->
 	<!-- <input type="number" id="levelup"  min="0" value="0" style="width: 40px;"> -->
 	<!-- <label for="levelup">levels up, root=fitalyser </label>  -->		
-	&nbsp
-	<select name="fileauto" id="fileauto" style = "text-align:right;"> 
-		<option value="./myactivities/table.csv" selected>myactivities</option>
-		<option value="./../../python/activities/summary2016-20xx.csv">2016-20xx</option>
-		<option value="./../../python/activities/summary2011-2016.csv">2011-2016</option>
+	&nbsp	
+	<label for="start_index">Garmin Connect: Start:</label>
+	<input id="start_index" type="number" value=0 min="0" max="10000" step="1" style="width:50px"/> 
+	<label for="max_limit">Limit:</label>
+	<input id="max_limit" type="number" value=20 min="20" max="1000" step="20" style="width:50px"/> 
+	&nbsp	
+	<label for="file">Download Folder:</label>
+	<input id="downloadDir" type="text" value="./myactivities/"/> 
+	<!-- <select name="downloadpop" id="downloadPop" style = "text-align:right;">  -->
+		<!-- <option value="downloadSingle">single</option> -->
+		<!-- <option value="downloadSeries">series</option> -->
 	</select>
+	<input id="activitiesList" type="button" value='Download'/> 
+	&nbsp
+	<input id="cleanTable" type="button" value='Clean table'/> 
 
 </body>
 
