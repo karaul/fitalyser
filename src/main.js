@@ -65,13 +65,29 @@ document.addEventListener('DOMContentLoaded', function () {
 	}
 
 	function cleanDoubleDots(file) {
-		return file.indexOf("../") < 0 ? file :
+		let pathname = file.indexOf("../") < 0 ? file :
 		file.replace(/\.\./g, 'LevelUp').
 		replace(/LevelUp\//g, 'LevelUp').replace(/\/LevelUp/g, 'LevelUp');
+		return pathname;
+	}
+
+	function fitalyserPath(filenamexhr) {
+		let i = filenamexhr.indexOf("/");
+		let idx = i;
+		while (i != -1) {
+			idx = i;
+			i = filenamexhr.indexOf("/", idx + 1)
+		}
+		let pathname = filenamexhr.slice(0, idx) || "LevelUpfitalyser";
+		pathname = pathname.indexOf("LevelUp") < 0 ?
+			"./fitalyser/" + pathname : 
+			("./" + pathname.replace("LevelUp", "")).replace(".fitalyser","fitalyser");
+		return pathname;
 	}
 
 	document.getElementById('openFile').onclick = function (e) {
 		const file = document.getElementById('file').value;
+		//pathname = cleanDoubleDots(file);
 		const filenamexhr = cleanDoubleDots(file);
 		//console.log(filenamexhr);
 		let xhr = new XMLHttpRequest();
@@ -81,13 +97,7 @@ document.addEventListener('DOMContentLoaded', function () {
 					const text = this.response;
 					//console.log(text);
 					// store pathname for future access
-					let i = filenamexhr.indexOf("/");
-					let idx = i;
-					while (i != -1) {
-						idx = i;
-						i = filenamexhr.indexOf("/", idx + 1)
-					}
-					pathname = filenamexhr.slice(0, idx) || "LevelUpfitalyser";
+					pathname = fitalyserPath(filenamexhr);
 					//console.log(pathname);
 					parseTable(text);
 				}
@@ -130,9 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	function plotdata(e) {
 		// e.target.id contains cell content = name of the FIT file
 		// https://www.codemag.com/article/1511031/CRUD-in-HTML-JavaScript-and-jQuery
-		let filename = pathname.indexOf("LevelUp") < 0 ?
-			"./fitalyser/" + pathname : pathname.replace("LevelUp", "");
-		filename += "/" + e.target.id;
+		let filename = pathname + "/" + e.target.id;
 		//console.log(filename);
 		if (windowFitplotter == null || windowFitplotter.closed) {
 			filename = filename.replace("+", "plus");
@@ -560,7 +568,8 @@ document.addEventListener('DOMContentLoaded', function () {
 			document.getElementById('start_index').value = start_index;
 			document.getElementById('max_limit').value = max_limit;
 			document.getElementById('downloadDir').value = downloadDir;
-			pathname = cleanDoubleDots(downloadDir);
+			pathname =  fitalyserPath(cleanDoubleDots(downloadDir));
+			console.log(pathname)
 			document.getElementById('activitiesList').dispatchEvent(new Event('click'));
 		}
 		if ( action === 'file' ) {
