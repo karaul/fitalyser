@@ -499,8 +499,10 @@ document.addEventListener('DOMContentLoaded', function () {
 			}
 		}
 		//console.log(data);
-		// remove activityId in order do not show it in the table, but have accessible in the data
+		// remove activityId and filename in order do not show them in the table, 
+		// but they are still are  aavailable in the data
 	    headers.splice( headers.indexOf("activityId"), 1 );
+	    headers.splice( headers.indexOf("filename"), 1 );
 		// now generate table with data formed from activitiesList
   		makeTable();
 		if (this.status === 404) {
