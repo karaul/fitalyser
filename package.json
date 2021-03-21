@@ -10,6 +10,6 @@
   "version": "0.1.0",
   "dependencies": {
     "open": "^7.4.0",
-    "portscanner": "^2.2.0",
+    "portscanner": "^2.2.0"
   }
 }
